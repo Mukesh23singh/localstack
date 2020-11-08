@@ -29,7 +29,10 @@ RUN set -x \
 
 # create a custom, minimized JRE via jlink
 RUN /usr/lib/jvm/java-11-openjdk/bin/jlink --add-modules \
-    java.base,java.desktop,java.instrument,java.management,java.naming,java.scripting,java.security.jgss,java.sql,java.xml,jdk.compiler \
+# include required modules
+java.base,java.desktop,java.instrument,java.management,java.naming,java.scripting,java.sql,java.xml,jdk.compiler,\
+# Elasticsearch 7+ crashes without Thai Segmentation support
+jdk.localedata --include-locales en,th \
     --compress 2 --strip-debug --no-header-files --no-man-pages --output /usr/lib/jvm/java-11 && \
   cp /usr/lib/jvm/java-11-openjdk/bin/javac /usr/lib/jvm/java-11/bin/javac && \
   cp -r /usr/lib/jvm/java-11-openjdk/include /usr/lib/jvm/java-11/include && \
